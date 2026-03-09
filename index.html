@@ -422,7 +422,13 @@
       if (fn) fn();
     }
 
-    function append(val) {
+function append(val) {
+  // If we just calculated, clear display for new number
+  if (window.justCalculated && /\d/.test(val)) {
+    display.value = '';
+    window.justCalculated = false;
+  }
+  
   playBeep(val);
   if (display.value.length >= 18) return;
   
@@ -482,6 +488,7 @@
   </script>
 </body>
 </html>
+
 
 
 
