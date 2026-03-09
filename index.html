@@ -457,9 +457,28 @@ function append(val) {
   playBeep('equals');
   try {
     // Replace pretty symbols back to math operators before calculating
-    let expression = display.value.replace(/÷/g, '/').replace(/×/g, '*');
-    const result = Function('"use strict"; return (' + expression + ')')();
-    display.value = result;
+    let expression = display.value.replace(/÷/g, '/').replace(/×/g, '*').replace(/−/g, '-');
+    
+    // Check if we're repeating the last calculation
+    if (window.lastExpression && expression === window.lastExpression) {
+      // Reapply: take the result and apply the last operation again
+      let result = Function('"use strict"; return (' + expression + ')')();
+      display.value = Function('"use strict"; return (' + result + window.lastOperator + window.lastOperand + ')')();
+    } else {
+      // First calculation: store the expression and extract operator/operand
+      const result = Function('"use strict"; return (' + expression + ')')();
+      
+      // Extract last operator and operand from expression
+      const match = expression.match(/([+\-*/])(\d+\.?\d*)$/);
+      if (match) {
+        window.lastOperator = match[1];
+        window.lastOperand = match[2];
+        window.lastExpression = expression;
+      }
+      
+      display.value = result;
+    }
+    window.justCalculated = true;
   } catch {
     display.value = 'ERROR IN SPACE';
     setTimeout(() => (display.value = ''), 1000);
@@ -488,6 +507,7 @@ function append(val) {
   </script>
 </body>
 </html>
+
 
 
 
