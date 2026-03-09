@@ -364,10 +364,18 @@
     }
 
     function append(val) {
-      playBeep(val);
-      if (display.value.length >= 18) return;
-      display.value += val;
-    }
+  playBeep(val);
+  if (display.value.length >= 18) return;
+  
+  // Display pretty symbols but store actual operators
+  if (val === '/') {
+    display.value += '÷';
+  } else if (val === '*') {
+    display.value += '×';
+  } else {
+    display.value += val;
+  }
+}
 
     function clearDisplay() {
       playBeep('clear');
@@ -380,16 +388,18 @@
     }
 
     function calculate() {
-      if (!display.value.trim()) return;
-      playBeep('equals');
-      try {
-        const result = Function('"use strict"; return (' + display.value + ')')();
-        display.value = result;
-      } catch {
-        display.value = 'ERROR IN SPACE';
-        setTimeout(() => (display.value = ''), 1000);
-      }
-    }
+  if (!display.value.trim()) return;
+  playBeep('equals');
+  try {
+    // Replace pretty symbols back to math operators before calculating
+    let expression = display.value.replace(/÷/g, '/').replace(/×/g, '*');
+    const result = Function('"use strict"; return (' + expression + ')')();
+    display.value = result;
+  } catch {
+    display.value = 'ERROR IN SPACE';
+    setTimeout(() => (display.value = ''), 1000);
+  }
+}
 
     window.addEventListener('keydown', (e) => {
       const key = e.key;
@@ -413,6 +423,7 @@
   </script>
 </body>
 </html>
+
 
 
 
