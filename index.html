@@ -239,10 +239,18 @@
       background: linear-gradient(135deg, #ff4081, #f50057);
     }
 
-    .clear {
-      background: linear-gradient(135deg, #ff1744, #d50000);
-      grid-column: 1 / -1;
-    }
+.clear {
+  grid-column: 1 / -1;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(90, 0, 0, 0.55) 0px,
+      rgba(90, 0, 0, 0.55) 18px,
+      transparent 18px,
+      transparent 36px
+    ),
+    linear-gradient(135deg, #ff1744, #d50000);
+}
 
     .backspace {
       background: radial-gradient(circle at 30% 30%, #b39ddb, #5e35b1);
@@ -520,6 +528,7 @@ function calculate() {
   </script>
 </body>
 </html>
+
 
 
 
