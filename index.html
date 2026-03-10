@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Space Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
 
@@ -177,15 +178,17 @@
       z-index: 1;
     }
 
-    .display {
-      width: 100%;
-      border: none;
-      background: transparent;
-      color: #76ff03;
-      font-size: 26px;
-      text-align: right;
-      outline: none;
-    }
+.display {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #76ff03;
+  font-family: 'Orbitron', monospace;
+  font-size: 30px;
+  letter-spacing: 2px;
+  text-align: right;
+  outline: none;
+}
 
     .buttons {
       display: grid;
@@ -442,43 +445,50 @@ function append(val) {
   }
 }
 
-    function clearDisplay() {
-      playBeep('clear');
-      display.value = '';
-    }
-
-    function backspace() {
-      playBeep('backspace');
-      display.value = display.value.slice(0, -1);
-    }
+function clearDisplay() {
+  playBeep('clear');
+  display.value = '';
+  window.lastOperator = null;
+  window.lastOperand = null;
+  window.justCalculated = false;
+}
 
 function calculate() {
   if (!display.value.trim()) return;
+
   playBeep('equals');
+
   try {
-    // Replace pretty symbols back to math operators before calculating
-    let expression = display.value.replace(/÷/g, '/').replace(/×/g, '*').replace(/−/g, '-');
-    
-    // Check if we're repeating the last calculation
-    if (window.lastExpression && expression === window.lastExpression) {
-      // Reapply: take the result and apply the last operation again
-      let result = Function('"use strict"; return (' + expression + ')')();
-      display.value = Function('"use strict"; return (' + result + window.lastOperator + window.lastOperand + ')')();
-    } else {
-      // First calculation: store the expression and extract operator/operand
-      const result = Function('"use strict"; return (' + expression + ')')();
-      
-      // Extract last operator and operand from expression
-      const match = expression.match(/([+\-*/])(\d+\.?\d*)$/);
-      if (match) {
-        window.lastOperator = match[1];
-        window.lastOperand = match[2];
-        window.lastExpression = expression;
-      }
-      
+
+    // Convert display symbols to real math operators
+    let expression = display.value
+      .replace(/÷/g, '/')
+      .replace(/×/g, '*')
+      .replace(/−/g, '-');
+
+    // If equals is pressed repeatedly
+    if (window.justCalculated && window.lastOperator) {
+      const result = Function('"use strict"; return (' +
+        display.value + window.lastOperator + window.lastOperand +
+      ')')();
+
       display.value = result;
+      return;
     }
+
+    // Normal calculation
+    const result = Function('"use strict"; return (' + expression + ')')();
+
+    // Extract last operator + operand
+    const match = expression.match(/([+\-*/])(\d+\.?\d*)$/);
+    if (match) {
+      window.lastOperator = match[1];
+      window.lastOperand = match[2];
+    }
+
+    display.value = result;
     window.justCalculated = true;
+
   } catch {
     display.value = 'ERROR IN SPACE';
     setTimeout(() => (display.value = ''), 1000);
@@ -507,6 +517,7 @@ function calculate() {
   </script>
 </body>
 </html>
+
 
 
 
