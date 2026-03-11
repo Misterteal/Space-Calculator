@@ -1,549 +1,422 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Space Calculator</title>
- <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; }
+<meta charset="UTF-8" />
+<title>Space Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #3f51b5 0, #0b1026 45%, #02030a 100%);
-      color: #fff;
-      overflow: hidden;
-    }
+<style>
+*{box-sizing:border-box;}
 
-    .calculator {
-      background: linear-gradient(145deg, #1b1f3b, #121628);
-      border-radius: 24px;
-      padding: 40px 20px 32px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      width: 320px;
-      border: 3px solid #7c4dff;
-      position: relative;
-      overflow: visible;
-    }
-
-/* Dense field of very small stars on the case */
-.calculator::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.75;
-  background-image:
-    radial-gradient(2px 2px at 5% 10%,  rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 12% 25%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 20% 18%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 28% 8%,  rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 35% 20%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 42% 12%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 50% 18%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 58% 9%,  rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 66% 16%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 74% 6%,  rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 82% 14%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 90% 9%,  rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 8% 32%,  rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 16% 40%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 24% 30%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 32% 38%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 40% 28%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 48% 36%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 56% 32%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 64% 40%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 72% 34%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 80% 42%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 88% 30%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 94% 38%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 6% 55%,  rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 14% 62%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 22% 50%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 30% 58%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 38% 52%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 46% 60%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 54% 54%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 62% 62%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 70% 56%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 78% 64%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 86% 52%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 94% 60%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 10% 78%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 18% 88%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 26% 74%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 34% 82%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 42% 76%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 50% 84%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 58% 78%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 66% 86%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 74% 80%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 82% 88%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 90% 74%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 96% 82%, rgba(255,255,255,0.7), transparent),
-    /* FIRST SET OF ADDITIONAL STARS */
-    radial-gradient(2px 2px at 3% 15%,  rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 11% 8%,  rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 19% 22%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 27% 14%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 38% 6%,  rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 45% 25%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 52% 11%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 63% 20%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 71% 28%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 84% 22%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 7% 45%,  rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 18% 52%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 25% 65%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 36% 48%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 44% 70%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 55% 45%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 68% 58%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 76% 48%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 87% 65%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 92% 52%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 4% 72%,  rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 13% 78%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 23% 90%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 31% 68%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 40% 82%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 52% 72%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 61% 88%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 75% 76%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 85% 85%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 95% 68%, rgba(255,255,255,0.7), transparent),
-    /* SECOND SET OF ADDITIONAL STARS */
-    radial-gradient(2px 2px at 2% 5%,   rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 9% 18%,  rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 15% 12%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 22% 35%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 33% 28%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 41% 42%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 48% 24%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 59% 38%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 69% 12%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 77% 22%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 3% 48%,  rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 11% 68%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 19% 58%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 29% 42%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 37% 75%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 47% 52%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 57% 68%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 65% 35%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 73% 58%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 81% 72%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 6% 88%,  rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 15% 95%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 21% 68%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 29% 80%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 39% 65%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 49% 92%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 59% 82%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 67% 68%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 77% 88%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 89% 78%, rgba(255,255,255,0.6), transparent);
+body{
+margin:0;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+background:radial-gradient(circle at top,#3f51b5 0,#0b1026 45%,#02030a 100%);
+color:#fff;
+overflow:hidden;
 }
 
-    .calculator::before {
-      content: "🚀 SPACE MATH";
-      position: absolute;
-      top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(90deg, #ff9800, #ff4081);
-      color: #fff;
-      padding: 4px 30px;
-      border-radius: 999px;
-      font-size: 13px;
-      letter-spacing: 1.2px;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-      white-space: nowrap;
-      z-index: 1;
-    }
-
-    .display-wrapper {
-      background: #020411;
-      border-radius: 16px;
-      padding: 10px;
-      margin-top: 18px;
-      margin-bottom: 14px;
-      position: relative;
-      border: 2px solid #263238;
-      z-index: 1;
-    }
-
-.display {
-  width: 100%;
-  border: none;
-  background: transparent;
-  color: #76ff03;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 28px;
-  letter-spacing: 1px;
-  text-align: right;
-  outline: none;
-  text-shadow:
-    0 0 4px #76ff03,
-    0 0 10px rgba(118,255,3,0.6);
+.calculator{
+background:linear-gradient(145deg,#1b1f3b,#121628);
+border-radius:24px;
+padding:40px 20px 32px;
+box-shadow:0 20px 40px rgba(0,0,0,0.6);
+width:320px;
+border:3px solid #7c4dff;
+position:relative;
+overflow:visible;
 }
 
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      position: relative;
-      z-index: 1;
-    }
+/* PARTICLE CANVAS */
 
-    button {
-      border: none;
-      border-radius: 16px;
-      padding: 12px;
-      font-size: 24px;
-      cursor: pointer;
-      color: #fff;
-      font-weight: 700;
-      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
-      box-shadow:
-        inset 1px 1px 0 rgba(255, 255, 255, 0.35),
-        0 3px 8px rgba(0, 0, 0, 0.35);
-    }
-
-    button:active {
-      filter: brightness(0.95);
-      transform: translateY(3px);
-      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.4);
-    }
-
-    .num-7 { background: radial-gradient(circle at 30% 30%, #ffeb3b, #ff9800); }
-    .num-8 { background: radial-gradient(circle at 30% 30%, #b388ff, #7c4dff); }
-    .num-9 { background: radial-gradient(circle at 30% 30%, #ff8a80, #e53935); }
-
-    .num-4 { background: radial-gradient(circle at 30% 30%, #40c4ff, #0277bd); }
-    .num-5 { background: radial-gradient(circle at 30% 30%, #69f0ae, #00c853); }
-    .num-6 { background: radial-gradient(circle at 30% 30%, #f48fb1, #d81b60); }
-
-    .num-1 { background: radial-gradient(circle at 30% 30%, #ffe082, #ffb300); }
-    .num-2 { background: radial-gradient(circle at 30% 30%, #80d8ff, #0091ea); }
-    .num-3 { background: radial-gradient(circle at 30% 30%, #80cbc4, #00695c); }
-
-    .num-0 { background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32); }
-
-    .operator {
-      background: linear-gradient(135deg, #ff4081, #f50057);
-    }
-
-.clear {
-  grid-column: 1 / -1;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(90, 0, 0, 0.55) 0px,
-      rgba(90, 0, 0, 0.55) 18px,
-      transparent 18px,
-      transparent 36px
-    ),
-    linear-gradient(135deg, #ff1744, #d50000);
+#particleCanvas{
+position:absolute;
+inset:-120px;
+pointer-events:none;
+z-index:20;
 }
 
-    .backspace {
-      background: radial-gradient(circle at 30% 30%, #b39ddb, #5e35b1);
-    }
+/* Dense stars on case */
 
-    .backspace-ship {
-      display: inline-block;
-      font-size: 26px;
-      transform: rotate(225deg);
-    }
+.calculator::after{
+content:"";
+position:absolute;
+inset:0;
+pointer-events:none;
+opacity:.75;
+background-image:
+radial-gradient(2px 2px at 5% 10%,rgba(255,255,255,.7),transparent),
+radial-gradient(2px 2px at 12% 25%,rgba(255,255,255,.6),transparent),
+radial-gradient(2px 2px at 20% 18%,rgba(255,255,255,.7),transparent);
+}
 
-    .dot {
-      background: radial-gradient(circle at 30% 30%, #ce93d8, #6a1b9a);
-    }
+.calculator::before{
+content:"🚀 SPACE MATH";
+position:absolute;
+top:15px;
+left:50%;
+transform:translateX(-50%);
+background:linear-gradient(90deg,#ff9800,#ff4081);
+color:#fff;
+padding:4px 30px;
+border-radius:999px;
+font-size:13px;
+letter-spacing:1.2px;
+text-shadow:0 1px 2px rgba(0,0,0,.5);
+white-space:nowrap;
+z-index:1;
+}
 
-    .equals {
-      background: linear-gradient(135deg, #00e5ff, #00b0ff);
-      grid-column: 1 / -1;
-    }
-  </style>
+.display-wrapper{
+background:#020411;
+border-radius:16px;
+padding:10px;
+margin-top:18px;
+margin-bottom:14px;
+position:relative;
+border:2px solid #263238;
+z-index:1;
+}
+
+.display{
+width:100%;
+border:none;
+background:transparent;
+color:#76ff03;
+font-family:'Share Tech Mono',monospace;
+font-size:28px;
+letter-spacing:1px;
+text-align:right;
+outline:none;
+text-shadow:0 0 4px #76ff03,0 0 10px rgba(118,255,3,.6);
+}
+
+.buttons{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+position:relative;
+z-index:1;
+}
+
+button{
+border:none;
+border-radius:16px;
+padding:12px;
+font-size:24px;
+cursor:pointer;
+color:#fff;
+font-weight:700;
+transition:transform .08s ease,box-shadow .08s ease,filter .08s ease;
+box-shadow:inset 1px 1px 0 rgba(255,255,255,.35),0 3px 8px rgba(0,0,0,.35);
+}
+
+button:active{
+filter:brightness(.95);
+transform:translateY(3px);
+box-shadow:inset 0 3px 6px rgba(0,0,0,.4);
+}
+
+.num-7{background:radial-gradient(circle at 30% 30%,#ffeb3b,#ff9800);}
+.num-8{background:radial-gradient(circle at 30% 30%,#b388ff,#7c4dff);}
+.num-9{background:radial-gradient(circle at 30% 30%,#ff8a80,#e53935);}
+.num-4{background:radial-gradient(circle at 30% 30%,#40c4ff,#0277bd);}
+.num-5{background:radial-gradient(circle at 30% 30%,#69f0ae,#00c853);}
+.num-6{background:radial-gradient(circle at 30% 30%,#f48fb1,#d81b60);}
+.num-1{background:radial-gradient(circle at 30% 30%,#ffe082,#ffb300);}
+.num-2{background:radial-gradient(circle at 30% 30%,#80d8ff,#0091ea);}
+.num-3{background:radial-gradient(circle at 30% 30%,#80cbc4,#00695c);}
+.num-0{background:radial-gradient(circle at 30% 30%,#a5d6a7,#2e7d32);}
+
+.operator{background:linear-gradient(135deg,#ff4081,#f50057);}
+
+.clear{
+grid-column:1/-1;
+background:
+repeating-linear-gradient(
+45deg,
+rgba(90,0,0,.55) 0px,
+rgba(90,0,0,.55) 18px,
+transparent 18px,
+transparent 36px),
+linear-gradient(135deg,#ff1744,#d50000);
+}
+
+.backspace{background:radial-gradient(circle at 30% 30%,#b39ddb,#5e35b1);}
+
+.backspace-ship{
+display:inline-block;
+font-size:26px;
+transform:rotate(225deg);
+}
+
+.dot{background:radial-gradient(circle at 30% 30%,#ce93d8,#6a1b9a);}
+
+.equals{
+background:linear-gradient(135deg,#00e5ff,#00b0ff);
+grid-column:1/-1;
+}
+</style>
 </head>
+
 <body>
-  <div class="calculator">
-    <div class="display-wrapper">
-      <input id="display" class="display" type="text" readonly />
-    </div>
 
-    <div class="buttons">
-        <button class="clear" onclick="clearDisplay()">CLEAR</button>
+<div class="calculator">
 
-        <button class="num-7" onclick="append('7')">7</button>
-        <button class="num-8" onclick="append('8')">8</button>
-        <button class="num-9" onclick="append('9')">9</button>
-        <button class="operator" onclick="append('/')">÷</button>
+<canvas id="particleCanvas"></canvas>
 
-        <button class="num-4" onclick="append('4')">4</button>
-        <button class="num-5" onclick="append('5')">5</button>
-        <button class="num-6" onclick="append('6')">6</button>
-        <button class="operator" onclick="append('*')">×</button>
+<div class="display-wrapper">
+<input id="display" class="display" type="text" readonly/>
+</div>
 
-        <button class="num-1" onclick="append('1')">1</button>
-        <button class="num-2" onclick="append('2')">2</button>
-        <button class="num-3" onclick="append('3')">3</button>
-        <button class="operator" onclick="append('-')">−</button>
+<div class="buttons">
 
-        <button class="num-0" onclick="append('0')">0</button>
-        <button class="dot" onclick="append('.')">.</button>
-        <button class="backspace" onclick="backspace()">
-          <span class="backspace-ship">🚀</span>
-        </button>
-        <button class="operator" onclick="append('+')">+</button>
+<button class="clear" onclick="clearDisplay()">CLEAR</button>
 
-        <button class="equals" onclick="calculate()">= LAUNCH</button>
-      </div>
-  </div>
+<button class="num-7" onclick="append('7')">7</button>
+<button class="num-8" onclick="append('8')">8</button>
+<button class="num-9" onclick="append('9')">9</button>
+<button class="operator" onclick="append('/')">÷</button>
 
-  <script>
-    const display = document.getElementById('display');
+<button class="num-4" onclick="append('4')">4</button>
+<button class="num-5" onclick="append('5')">5</button>
+<button class="num-6" onclick="append('6')">6</button>
+<button class="operator" onclick="append('*')">×</button>
 
-    // Space beep sounds (Web Audio API – no external files)
-    let audioCtx = null;
-    function getCtx() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      return audioCtx;
-    }
+<button class="num-1" onclick="append('1')">1</button>
+<button class="num-2" onclick="append('2')">2</button>
+<button class="num-3" onclick="append('3')">3</button>
+<button class="operator" onclick="append('-')">−</button>
 
-    function spaceBeep(opts) {
-      const ctx = getCtx();
-      const freq = opts.freq ?? 440;
-      const freq2 = opts.freq2;
-      const duration = opts.duration ?? 0.06;
-      const type = opts.type ?? 'square';
-      const vol = opts.vol ?? 0.12;
+<button class="num-0" onclick="append('0')">0</button>
+<button class="dot" onclick="append('.')">.</button>
+<button class="backspace" onclick="backspace()">
+<span class="backspace-ship">🚀</span>
+</button>
+<button class="operator" onclick="append('+')">+</button>
 
-      const gain = ctx.createGain();
-      gain.connect(ctx.destination);
-      gain.gain.setValueAtTime(vol, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+<button class="equals" onclick="calculate()">= LAUNCH</button>
 
-      const osc = ctx.createOscillator();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      if (freq2 != null) {
-        osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        osc.frequency.linearRampToValueAtTime(freq2, ctx.currentTime + duration * 0.5);
-      }
-      osc.connect(gain);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + duration);
-    }
+</div>
+</div>
 
-    function takeoffSound() {
-      const ctx = getCtx();
-      const duration = 0.28;
-      const gain = ctx.createGain();
-      gain.connect(ctx.destination);
-      gain.gain.setValueAtTime(0, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.02);
-      gain.gain.setValueAtTime(0.2, ctx.currentTime + duration * 0.6);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+<script>
 
-      const osc = ctx.createOscillator();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(55, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + duration);
-      osc.connect(gain);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + duration);
+const display=document.getElementById('display')
 
-      const sub = ctx.createOscillator();
-      sub.type = 'sine';
-      sub.frequency.setValueAtTime(40, ctx.currentTime);
-      sub.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + duration);
-      const subGain = ctx.createGain();
-      subGain.gain.setValueAtTime(0.25, ctx.currentTime);
-      subGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-      sub.connect(subGain);
-      subGain.connect(ctx.destination);
-      sub.start(ctx.currentTime);
-      sub.stop(ctx.currentTime + duration);
-    }
+/* PARTICLE SYSTEM */
 
-    function explosionSound() {
-      const ctx = getCtx();
-      const duration = 3;
-      const t0 = ctx.currentTime;
+const canvas=document.getElementById("particleCanvas")
+const ctx=canvas.getContext("2d")
 
-      const bufferSize = ctx.sampleRate * duration;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.4));
-      const noise = ctx.createBufferSource();
-      noise.buffer = buffer;
-      const noiseFilter = ctx.createBiquadFilter();
-      noiseFilter.type = 'lowpass';
-      noiseFilter.frequency.setValueAtTime(1200, t0);
-      noiseFilter.frequency.exponentialRampToValueAtTime(80, t0 + duration);
-      const noiseGain = ctx.createGain();
-      noiseGain.gain.setValueAtTime(0.35, t0);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, t0 + duration);
-      noise.connect(noiseFilter);
-      noiseFilter.connect(noiseGain);
-      noiseGain.connect(ctx.destination);
-      noise.start(t0);
-      noise.stop(t0 + duration);
+let particles=[]
 
-      const thump = ctx.createOscillator();
-      thump.type = 'sine';
-      thump.frequency.setValueAtTime(90, t0);
-      thump.frequency.exponentialRampToValueAtTime(25, t0 + duration * 0.5);
-      const thumpGain = ctx.createGain();
-      thumpGain.gain.setValueAtTime(0.4, t0);
-      thumpGain.gain.exponentialRampToValueAtTime(0.001, t0 + duration);
-      thump.connect(thumpGain);
-      thumpGain.connect(ctx.destination);
-      thump.start(t0);
-      thump.stop(t0 + duration);
-    }
-
-    const beeps = {
-      '0': () => spaceBeep({ freq: 220, type: 'square', duration: 0.05 }),
-      '1': () => spaceBeep({ freq: 262, type: 'square', duration: 0.05 }),
-      '2': () => spaceBeep({ freq: 294, type: 'square', duration: 0.05 }),
-      '3': () => spaceBeep({ freq: 330, type: 'square', duration: 0.05 }),
-      '4': () => spaceBeep({ freq: 349, type: 'square', duration: 0.05 }),
-      '5': () => spaceBeep({ freq: 392, type: 'square', duration: 0.05 }),
-      '6': () => spaceBeep({ freq: 440, type: 'square', duration: 0.05 }),
-      '7': () => spaceBeep({ freq: 494, type: 'square', duration: 0.05 }),
-      '8': () => spaceBeep({ freq: 523, type: 'square', duration: 0.05 }),
-      '9': () => spaceBeep({ freq: 587, type: 'square', duration: 0.05 }),
-      '.': () => spaceBeep({ freq: 880, type: 'sine', duration: 0.03 }),
-      '+': () => spaceBeep({ freq: 400, freq2: 600, type: 'square', duration: 0.08 }),
-      '-': () => spaceBeep({ freq: 600, freq2: 400, type: 'square', duration: 0.08 }),
-      '*': () => spaceBeep({ freq: 500, freq2: 700, type: 'square', duration: 0.08 }),
-      '/': () => spaceBeep({ freq: 700, freq2: 500, type: 'square', duration: 0.08 }),
-      clear: explosionSound,
-      backspace: () => spaceBeep({ freq: 200, type: 'triangle', duration: 0.04 }),
-      equals: takeoffSound
-    };
-
-    function playBeep(key) {
-      const fn = beeps[key];
-      if (fn) fn();
-    }
-
-function append(val) {
-  // If we just calculated, clear display for new number
-  if (window.justCalculated && /\d/.test(val)) {
-    display.value = '';
-    window.justCalculated = false;
-  }
-  
-  playBeep(val);
-  if (display.value.length >= 18) return;
-  
-  // Display pretty symbols but store actual operators
-  if (val === '/') {
-    display.value += '÷';
-  } else if (val === '*') {
-    display.value += '×';
-  } else {
-    display.value += val;
-  }
+function resizeCanvas(){
+const rect=document.querySelector(".calculator").getBoundingClientRect()
+canvas.width=rect.width+240
+canvas.height=rect.height+240
 }
 
-function backspace() {
-  if (!display.value) return;
+resizeCanvas()
+window.addEventListener("resize",resizeCanvas)
 
-  playBeep('backspace');
+function explodeDisplay(text){
 
-  display.value = display.value.slice(0, -1);
+if(!text)return
+
+const rect=display.getBoundingClientRect()
+const calc=document.querySelector(".calculator").getBoundingClientRect()
+
+const startX=rect.left-calc.left+120
+const startY=rect.top-calc.top+120
+const charWidth=rect.width/Math.max(text.length,1)
+
+for(let i=0;i<text.length;i++){
+
+const x=startX+i*charWidth+charWidth/2
+const y=startY+rect.height/2
+
+for(let j=0;j<10;j++){
+
+particles.push({
+x,
+y,
+vx:(Math.random()-0.5)*12,
+vy:(Math.random()-0.5)*12,
+life:60+Math.random()*30,
+size:2+Math.random()*3
+})
+
 }
-    
-function clearDisplay() {
-  playBeep('clear');
-  display.value = '';
-  window.lastOperator = null;
-  window.lastOperand = null;
-  window.justCalculated = false;
-}
-
-function calculate() {
-  if (!display.value.trim()) return;
-
-  playBeep('equals');
-
-  try {
-
-    // Convert display symbols to real math operators
-    let expression = display.value
-      .replace(/÷/g, '/')
-      .replace(/×/g, '*')
-      .replace(/−/g, '-');
-
-    // If equals is pressed repeatedly
-    if (window.justCalculated && window.lastOperator) {
-      const result = Function('"use strict"; return (' +
-        display.value + window.lastOperator + window.lastOperand +
-      ')')();
-
-      display.value = result;
-      return;
-    }
-
-    // Normal calculation
-    const result = Function('"use strict"; return (' + expression + ')')();
-
-    // Extract last operator + operand
-    const match = expression.match(/([+\-*/])(\d+\.?\d*)$/);
-    if (match) {
-      window.lastOperator = match[1];
-      window.lastOperand = match[2];
-    }
-
-    display.value = result;
-    window.justCalculated = true;
-
-  } catch {
-    display.value = 'ERROR IN SPACE';
-    setTimeout(() => (display.value = ''), 1000);
-  }
 }
 
-    window.addEventListener('keydown', (e) => {
-      const key = e.key;
-      if (/\d/.test(key)) { append(key); return; }
-      if (key === '.') { append('.'); return; }
-      if (['+', '-', '*', '/'].includes(key)) { append(key); return; }
-      if (key === 'Enter' || key === '=') {
-        e.preventDefault();
-        calculate();
-        return;
-      }
-      if (key === 'Escape' || key.toLowerCase() === 'c') {
-        clearDisplay();
-        return;
-      }
-      if (key === 'Backspace') {
-        e.preventDefault();
-        backspace();
-      }
-    });
-  </script>
+animateParticles()
+}
+
+function animateParticles(){
+
+function frame(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+for(let i=particles.length-1;i>=0;i--){
+
+const p=particles[i]
+
+p.x+=p.vx
+p.y+=p.vy
+p.vy+=0.08
+p.life--
+
+ctx.fillStyle="#76ff03"
+ctx.fillRect(p.x,p.y,p.size,p.size)
+
+if(p.life<=0)particles.splice(i,1)
+
+}
+
+if(particles.length)requestAnimationFrame(frame)
+}
+
+requestAnimationFrame(frame)
+
+}
+
+/* AUDIO SYSTEM */
+
+let audioCtx=null
+function getCtx(){
+if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)()
+return audioCtx
+}
+
+function spaceBeep(opts){
+const ctx=getCtx()
+const freq=opts.freq??440
+const duration=opts.duration??0.06
+const type=opts.type??'square'
+
+const gain=ctx.createGain()
+gain.connect(ctx.destination)
+gain.gain.setValueAtTime(.12,ctx.currentTime)
+gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration)
+
+const osc=ctx.createOscillator()
+osc.type=type
+osc.frequency.setValueAtTime(freq,ctx.currentTime)
+osc.connect(gain)
+osc.start(ctx.currentTime)
+osc.stop(ctx.currentTime+duration)
+}
+
+function explosionSound(){
+spaceBeep({freq:90,type:"sawtooth",duration:.3})
+}
+
+const beeps={
+backspace:()=>spaceBeep({freq:200,type:'triangle',duration:.04}),
+equals:()=>spaceBeep({freq:700,type:'square',duration:.12}),
+clear:explosionSound
+}
+
+function playBeep(key){
+const fn=beeps[key]
+if(fn)fn()
+}
+
+/* CALCULATOR LOGIC */
+
+function append(val){
+
+if(window.justCalculated&&/\d/.test(val)){
+display.value=''
+window.justCalculated=false
+}
+
+if(display.value.length>=18)return
+
+if(val==='/')display.value+='÷'
+else if(val==='*')display.value+='×'
+else display.value+=val
+}
+
+function backspace(){
+
+if(!display.value)return
+playBeep('backspace')
+display.value=display.value.slice(0,-1)
+
+}
+
+function clearDisplay(){
+
+playBeep('clear')
+explodeDisplay(display.value)
+
+display.value=''
+window.lastOperator=null
+window.lastOperand=null
+window.justCalculated=false
+
+}
+
+function calculate(){
+
+if(!display.value.trim())return
+playBeep('equals')
+
+try{
+
+let expression=display.value
+.replace(/÷/g,'/')
+.replace(/×/g,'*')
+.replace(/−/g,'-')
+
+const result=Function('"use strict";return ('+expression+')')()
+
+display.value=result
+window.justCalculated=true
+
+}catch{
+
+display.value='ERROR IN SPACE'
+setTimeout(()=>display.value='',1000)
+
+}
+
+}
+
+window.addEventListener('keydown',e=>{
+
+const key=e.key
+
+if(/\d/.test(key)){append(key);return}
+if(key==='.'){append('.');return}
+if(['+','-','*','/'].includes(key)){append(key);return}
+
+if(key==='Enter'||key==='='){
+e.preventDefault()
+calculate()
+return
+}
+
+if(key==='Escape'||key.toLowerCase()==='c'){
+clearDisplay()
+return
+}
+
+if(key==='Backspace'){
+e.preventDefault()
+backspace()
+}
+
+})
+
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
