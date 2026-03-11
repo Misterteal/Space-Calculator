@@ -203,35 +203,44 @@ function formatNumber(num){
   int=int.replace(/\B(?=(\d{3})+(?!\d))/g,",");
   return dec?int+"."+dec:int;
 }
-function updateDisplay(){ display.value=expression; }
+function updateDisplay(){
+  // Live formatting with commas
+  let displayStr="";
+  let parts=expression.split(/([+\-×÷])/);
+  for(let p of parts){
+    if(operators.includes(p)) displayStr+=p;
+    else displayStr+=formatNumber(p);
+  }
+  display.value=displayStr;
+}
 
 /* APPEND FUNCTIONS */
 function appendNumber(n){
   playBeep("num");
-  if(justCalculated){expression="";justCalculated=false;}
+  if(justCalculated){expression=""; justCalculated=false;}
   expression+=n; updateDisplay();
 }
 function appendDot(){
   playBeep("num");
-  if(justCalculated){expression="";justCalculated=false;}
+  if(justCalculated){expression=""; justCalculated=false;}
   const parts=expression.split(/[+\-×÷]/);
-  if(parts[parts.length-1].includes("."))return;
+  if(parts[parts.length-1].includes(".")) return;
   expression+="."; updateDisplay();
 }
 function appendOperator(op){
   playBeep("operator");
-  if(expression==="")return;
+  if(expression==="") return;
   const last=expression.slice(-1);
   if(operators.includes(last)){
     expression=expression.slice(0,-1)+op;
-  }else expression+=op;
+  } else expression+=op;
   justCalculated=false;
   updateDisplay();
 }
 
 /* BACKSPACE AND CLEAR */
 function backspace(){ playBeep("backspace"); expression=expression.slice(0,-1); updateDisplay(); }
-function clearDisplay(){ playBeep("clear"); explodeDisplay(display.value); expression=""; updateDisplay(); }
+function clearDisplay(){ playBeep("clear"); explodeDisplay(display.value); expression=""; lastOperator=null; lastOperand=null; updateDisplay(); }
 
 /* PARTICLES */
 const canvas=document.getElementById("particleCanvas");
@@ -247,7 +256,7 @@ window.addEventListener("resize",resizeCanvas);
 
 function explodeDisplay(text){
   particles=[];
-  if(!text)return;
+  if(!text) return;
   const rect=display.getBoundingClientRect();
   const calc=document.querySelector(".calculator").getBoundingClientRect();
   const startX=rect.left-calc.left+140;
@@ -269,26 +278,37 @@ function animateParticles(){
     const p=particles[i];
     p.x+=p.vx; p.y+=p.vy; p.vy+=0.16; p.life--;
     ctx.fillStyle="#76ff03"; ctx.fillRect(p.x,p.y,p.size,p.size);
-    if(p.life<=0)particles.splice(i,1);
+    if(p.life<=0) particles.splice(i,1);
   }
-  if(particles.length)requestAnimationFrame(animateParticles);
+  if(particles.length) requestAnimationFrame(animateParticles);
   else{animating=false; ctx.clearRect(0,0,canvas.width,canvas.height);}
 }
 
 /* CALCULATION */
 function calculate(){
   playBeep("equals");
-  let jsExp=expression.replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-");
+  let jsExp=expression.replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/,/g,"");
+
   try{
+    // Repeat last operation if equals pressed again
+    if(justCalculated && lastOperator && lastOperand){
+      jsExp=expression.replace(/,/g,"")+lastOperator+lastOperand;
+    }
+
     const result=eval(jsExp);
-    const match=jsExp.match(/([+\-*/])([^+\-*/]+)$/);
-    if(match){lastOperator=match[1]; lastOperand=match[2];}
+
+    // Store last operation only if new operator typed
+    if(!justCalculated){
+      const match=jsExp.match(/([+\-*/])([^+\-*/]+)$/);
+      if(match){lastOperator=match[1]; lastOperand=match[2];}
+    }
+
     expression=String(result);
     justCalculated=true;
-    display.value=formatNumber(expression);
+    updateDisplay();
   }catch{
     display.value="ERROR";
-    setTimeout(()=>{expression=""; updateDisplay();},1000);
+    setTimeout(()=>{expression=""; lastOperator=null; lastOperand=null; updateDisplay();},1000);
   }
 }
 
