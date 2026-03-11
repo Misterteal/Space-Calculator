@@ -52,7 +52,8 @@ background:linear-gradient(90deg,#ff9800,#ff4081);
 padding:4px 30px;
 border-radius:999px;
 font-size:13px;
-letter-spacing:1px
+letter-spacing:1px;
+white-space:nowrap;
 }
 
 /* DISPLAY */
@@ -76,7 +77,9 @@ font-size:28px;
 text-align:right;
 outline:none;
 letter-spacing:1px;
-text-shadow:0 0 4px #76ff03,0 0 10px rgba(118,255,3,.6)
+text-shadow:0 0 4px #76ff03,0 0 10px rgba(118,255,3,.6);
+white-space:nowrap;
+overflow:hidden
 }
 
 /* BUTTON GRID */
@@ -164,29 +167,29 @@ grid-column:1/-1
 
 <button class="clear" onclick="clearDisplay()">CLEAR</button>
 
-<button class="num-7" onclick="append('7')">7</button>
-<button class="num-8" onclick="append('8')">8</button>
-<button class="num-9" onclick="append('9')">9</button>
-<button class="operator" onclick="append('/')">÷</button>
+<button class="num-7" onclick="appendNumber('7')">7</button>
+<button class="num-8" onclick="appendNumber('8')">8</button>
+<button class="num-9" onclick="appendNumber('9')">9</button>
+<button class="operator" onclick="appendOperator('÷')">÷</button>
 
-<button class="num-4" onclick="append('4')">4</button>
-<button class="num-5" onclick="append('5')">5</button>
-<button class="num-6" onclick="append('6')">6</button>
-<button class="operator" onclick="append('*')">×</button>
+<button class="num-4" onclick="appendNumber('4')">4</button>
+<button class="num-5" onclick="appendNumber('5')">5</button>
+<button class="num-6" onclick="appendNumber('6')">6</button>
+<button class="operator" onclick="appendOperator('×')">×</button>
 
-<button class="num-1" onclick="append('1')">1</button>
-<button class="num-2" onclick="append('2')">2</button>
-<button class="num-3" onclick="append('3')">3</button>
-<button class="operator" onclick="append('-')">−</button>
+<button class="num-1" onclick="appendNumber('1')">1</button>
+<button class="num-2" onclick="appendNumber('2')">2</button>
+<button class="num-3" onclick="appendNumber('3')">3</button>
+<button class="operator" onclick="appendOperator('-')">−</button>
 
-<button class="num-0" onclick="append('0')">0</button>
-<button class="dot" onclick="append('.')">.</button>
+<button class="num-0" onclick="appendNumber('0')">0</button>
+<button class="dot" onclick="appendDot()">.</button>
 
 <button class="backspace" onclick="backspace()">
 <span class="backspace-ship">🚀</span>
 </button>
 
-<button class="operator" onclick="append('+')">+</button>
+<button class="operator" onclick="appendOperator('+')">+</button>
 
 <button class="equals" onclick="calculate()">= LAUNCH</button>
 
@@ -195,29 +198,91 @@ grid-column:1/-1
 
 <script>
 
-/* DISPLAY */
-
 const display=document.getElementById("display")
 
-let displayValue=""
+let expression=""
 let lastOperator=null
 let lastOperand=null
 let justCalculated=false
 
+const operators=["+","-","×","÷"]
+
 function formatNumber(num){
 
-if(num==="") return ""
+if(num==="")return ""
 
 let [int,dec]=num.split(".")
 
 int=int.replace(/\B(?=(\d{3})+(?!\d))/g,",")
 
-return dec ? int+"."+dec : int
+return dec?int+"."+dec:int
 
 }
 
 function updateDisplay(){
-display.value=formatNumber(displayValue)
+
+display.value=expression
+
+}
+
+function appendNumber(n){
+
+if(justCalculated){
+expression=""
+justCalculated=false
+}
+
+expression+=n
+updateDisplay()
+
+}
+
+function appendDot(){
+
+if(justCalculated){
+expression=""
+justCalculated=false
+}
+
+const parts=expression.split(/[+\-×÷]/)
+if(parts[parts.length-1].includes("."))return
+
+expression+="."
+updateDisplay()
+
+}
+
+function appendOperator(op){
+
+if(expression==="")return
+
+const last=expression.slice(-1)
+
+if(operators.includes(last)){
+expression=expression.slice(0,-1)+op
+}else{
+expression+=op
+}
+
+justCalculated=false
+updateDisplay()
+
+}
+
+function backspace(){
+
+expression=expression.slice(0,-1)
+updateDisplay()
+
+}
+
+function clearDisplay(){
+
+explodeDisplay(display.value)
+
+expression=""
+updateDisplay()
+
 }
 
 /* PARTICLES */
@@ -226,6 +291,7 @@ const canvas=document.getElementById("particleCanvas")
 const ctx=canvas.getContext("2d")
 
 let particles=[]
+let animating=false
 
 function resizeCanvas(){
 const rect=document.querySelector(".calculator").getBoundingClientRect()
@@ -237,6 +303,8 @@ resizeCanvas()
 window.addEventListener("resize",resizeCanvas)
 
 function explodeDisplay(text){
+
+particles=[]
 
 if(!text)return
 
@@ -267,13 +335,14 @@ size:2+Math.random()*3
 
 }
 
-animateParticles()
+if(!animating){
+animating=true
+requestAnimationFrame(animateParticles)
+}
 
 }
 
 function animateParticles(){
-
-function frame(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height)
 
@@ -293,139 +362,45 @@ if(p.life<=0)particles.splice(i,1)
 
 }
 
-if(particles.length)requestAnimationFrame(frame)
-
-}
-
-requestAnimationFrame(frame)
-
-}
-
-/* AUDIO */
-
-let audioCtx=null
-
-function tone(freq,d=.05,type="square",v=.15){
-
-const ctx=audioCtx||(audioCtx=new(window.AudioContext||window.webkitAudioContext)())
-
-const osc=ctx.createOscillator()
-const gain=ctx.createGain()
-
-osc.type=type
-osc.frequency.value=freq
-
-gain.gain.setValueAtTime(v,ctx.currentTime)
-gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+d)
-
-osc.connect(gain)
-gain.connect(ctx.destination)
-
-osc.start()
-osc.stop(ctx.currentTime+d)
-
-}
-
-function playBeep(type){
-
-if(type==="num")tone(420)
-else if(type==="operator")tone(260,.06,"triangle")
-else if(type==="equals")tone(820,.12)
-else if(type==="backspace")tone(200,.05,"triangle")
-
-else if(type==="clear"){
-
-tone(90,.25,"sawtooth",.25)
-setTimeout(()=>tone(60,.25,"sawtooth",.2),40)
-setTimeout(()=>tone(40,.3,"sawtooth",.15),90)
-
+if(particles.length){
+requestAnimationFrame(animateParticles)
+}else{
+animating=false
+ctx.clearRect(0,0,canvas.width,canvas.height)
 }
 
 }
 
-/* CALCULATOR */
-
-function append(val){
-
-if(displayValue.length>18)return
-
-playBeep(/\d|\./.test(val)?"num":"operator")
-
-if(justCalculated && /\d/.test(val)){
-displayValue=""
-justCalculated=false
-}
-
-displayValue+=val
-updateDisplay()
-
-}
-
-function backspace(){
-
-if(!displayValue)return
-
-playBeep("backspace")
-
-displayValue=displayValue.slice(0,-1)
-
-updateDisplay()
-
-}
-
-function clearDisplay(){
-
-playBeep("clear")
-explodeDisplay(displayValue)
-
-displayValue=""
-lastOperator=null
-lastOperand=null
-
-updateDisplay()
-
-}
+/* CALCULATE */
 
 function calculate(){
 
-playBeep("equals")
-
-let expression=displayValue
-.replace(/÷/g,"/")
+let jsExp=expression
 .replace(/×/g,"*")
-.replace(/−/g,"-")
-
-if(justCalculated && lastOperator){
-
-displayValue=String(eval(displayValue+lastOperator+lastOperand))
-updateDisplay()
-return
-
-}
+.replace(/÷/g,"/")
 
 try{
 
-const result=eval(expression)
+const result=eval(jsExp)
 
-const match=expression.match(/([+\-*/])([^+\-*/]+)$/)
+const match=jsExp.match(/([+\-*/])([^+\-*/]+)$/)
 
 if(match){
 lastOperator=match[1]
 lastOperand=match[2]
 }
 
-displayValue=String(result)
+expression=String(result)
 justCalculated=true
 
-updateDisplay()
+display.value=formatNumber(expression)
 
 }catch{
 
-displayValue="ERROR"
-updateDisplay()
+display.value="ERROR"
 
 setTimeout(()=>{
-displayValue=""
+expression=""
 updateDisplay()
 },1000)
 
@@ -439,13 +414,13 @@ window.addEventListener("keydown",e=>{
 
 const k=e.key
 
-if(/\d/.test(k)){append(k);return}
-if(k==="."){append(".");return}
+if(/\d/.test(k)){appendNumber(k);return}
 
-if(['+','-','*','/'].includes(k)){
-append(k)
-return
-}
+if(k==="."){appendDot();return}
+
+if(k==="*"){appendOperator("×");return}
+if(k==="/"){appendOperator("÷");return}
+if(k==="+"||k==="-" ){appendOperator(k);return}
 
 if(k==="Enter"||k==="="){
 e.preventDefault()
