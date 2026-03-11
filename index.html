@@ -3,168 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <title>Space Calculator</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
 <style>
-
 *{box-sizing:border-box}
-
 body{
-margin:0;
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:radial-gradient(circle at top,#3f51b5 0,#0b1026 45%,#02030a 100%);
-font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-color:white;
-overflow:hidden
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle at top,#3f51b5 0,#0b1026 45%,#02030a 100%);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:white;
+  overflow:hidden;
 }
 
 .calculator{
-background:linear-gradient(145deg,#1b1f3b,#121628);
-border-radius:24px;
-padding:40px 20px 32px;
-box-shadow:0 20px 40px rgba(0,0,0,.6);
-width:320px;
-border:3px solid #7c4dff;
-position:relative;
-overflow:visible
+  background:linear-gradient(145deg,#1b1f3b,#121628);
+  border-radius:24px;
+  padding:40px 20px 32px;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);
+  width:320px;
+  border:3px solid #7c4dff;
+  position:relative;
+  overflow:visible;
 }
 
-/* PARTICLES */
-
 #particleCanvas{
-position:absolute;
-inset:-140px;
-pointer-events:none;
-z-index:10
+  position:absolute;
+  inset:-140px;
+  pointer-events:none;
+  z-index:10;
 }
 
 .calculator::before{
-content:"🚀 SPACE MATH";
-position:absolute;
-top:14px;
-left:50%;
-transform:translateX(-50%);
-background:linear-gradient(90deg,#ff9800,#ff4081);
-padding:4px 30px;
-border-radius:999px;
-font-size:13px;
-letter-spacing:1px;
-white-space:nowrap;
+  content:"🚀 SPACE MATH";
+  position:absolute;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  background:linear-gradient(90deg,#ff9800,#ff4081);
+  padding:4px 30px;
+  border-radius:999px;
+  font-size:13px;
+  letter-spacing:1px;
+  white-space:nowrap;
 }
 
-/* DISPLAY */
-
 .display-wrapper{
-background:#020411;
-border-radius:16px;
-padding:10px;
-margin-top:18px;
-margin-bottom:14px;
-border:2px solid #263238
+  background:#020411;
+  border-radius:16px;
+  padding:10px;
+  margin-top:18px;
+  margin-bottom:14px;
+  border:2px solid #263238;
 }
 
 .display{
-width:100%;
-border:none;
-background:transparent;
-color:#76ff03;
-font-family:'Share Tech Mono',monospace;
-font-size:28px;
-text-align:right;
-outline:none;
-letter-spacing:1px;
-text-shadow:0 0 4px #76ff03,0 0 10px rgba(118,255,3,.6);
-white-space:nowrap;
-overflow:hidden
+  width:100%;
+  border:none;
+  background:transparent;
+  color:#76ff03;
+  font-family:'Share Tech Mono',monospace;
+  font-size:28px;
+  text-align:right;
+  outline:none;
+  letter-spacing:1px;
+  text-shadow:0 0 4px #76ff03,0 0 10px rgba(118,255,3,.6);
+  white-space:nowrap;
+  overflow:hidden;
 }
 
-/* BUTTON GRID */
-
 .buttons{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
 }
 
 button{
-border:none;
-border-radius:16px;
-padding:12px;
-font-size:24px;
-cursor:pointer;
-color:white;
-font-weight:700;
-transition:transform .08s ease,box-shadow .08s ease,filter .08s ease;
-box-shadow:inset 1px 1px 0 rgba(255,255,255,.35),0 3px 8px rgba(0,0,0,.35)
+  border:none;
+  border-radius:16px;
+  padding:12px;
+  font-size:24px;
+  cursor:pointer;
+  color:white;
+  font-weight:700;
+  transition:transform .08s ease,box-shadow .08s ease,filter .08s ease;
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.35),0 3px 8px rgba(0,0,0,.35);
 }
 
 button:active{
-filter:brightness(.95);
-transform:translateY(3px);
-box-shadow:inset 0 3px 6px rgba(0,0,0,.4)
+  filter:brightness(.95);
+  transform:translateY(3px);
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.4);
 }
 
 /* NUMBER COLOURS */
+.num-7{background:radial-gradient(circle at 30% 30%,#ffeb3b,#ff9800);}
+.num-8{background:radial-gradient(circle at 30% 30%,#b388ff,#7c4dff);}
+.num-9{background:radial-gradient(circle at 30% 30%,#ff8a80,#e53935);}
+.num-4{background:radial-gradient(circle at 30% 30%,#40c4ff,#0277bd);}
+.num-5{background:radial-gradient(circle at 30% 30%,#69f0ae,#00c853);}
+.num-6{background:radial-gradient(circle at 30% 30%,#f48fb1,#d81b60);}
+.num-1{background:radial-gradient(circle at 30% 30%,#ffe082,#ffb300);}
+.num-2{background:radial-gradient(circle at 30% 30%,#80d8ff,#0091ea);}
+.num-3{background:radial-gradient(circle at 30% 30%,#80cbc4,#00695c);}
+.num-0{background:radial-gradient(circle at 30% 30%,#a5d6a7,#2e7d32);}
 
-.num-7{background:radial-gradient(circle at 30% 30%,#ffeb3b,#ff9800)}
-.num-8{background:radial-gradient(circle at 30% 30%,#b388ff,#7c4dff)}
-.num-9{background:radial-gradient(circle at 30% 30%,#ff8a80,#e53935)}
-.num-4{background:radial-gradient(circle at 30% 30%,#40c4ff,#0277bd)}
-.num-5{background:radial-gradient(circle at 30% 30%,#69f0ae,#00c853)}
-.num-6{background:radial-gradient(circle at 30% 30%,#f48fb1,#d81b60)}
-.num-1{background:radial-gradient(circle at 30% 30%,#ffe082,#ffb300)}
-.num-2{background:radial-gradient(circle at 30% 30%,#80d8ff,#0091ea)}
-.num-3{background:radial-gradient(circle at 30% 30%,#80cbc4,#00695c)}
-.num-0{background:radial-gradient(circle at 30% 30%,#a5d6a7,#2e7d32)}
-
-.operator{background:linear-gradient(135deg,#ff4081,#f50057)}
-
+.operator{background:linear-gradient(135deg,#ff4081,#f50057);}
 .clear{
-grid-column:1/-1;
-background:
-repeating-linear-gradient(
-45deg,
-rgba(90,0,0,.55) 0px,
-rgba(90,0,0,.55) 18px,
-transparent 18px,
-transparent 36px),
-linear-gradient(135deg,#ff1744,#d50000)
+  grid-column:1/-1;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(90,0,0,.55) 0px,
+      rgba(90,0,0,.55) 18px,
+      transparent 18px,
+      transparent 36px),
+    linear-gradient(135deg,#ff1744,#d50000);
 }
-
-.backspace{background:radial-gradient(circle at 30% 30%,#b39ddb,#5e35b1)}
-
-.backspace-ship{
-display:inline-block;
-font-size:26px;
-transform:rotate(225deg)
-}
-
-.dot{background:radial-gradient(circle at 30% 30%,#ce93d8,#6a1b9a)}
-
-.equals{
-background:linear-gradient(135deg,#00e5ff,#00b0ff);
-grid-column:1/-1
-}
-
+.backspace{background:radial-gradient(circle at 30% 30%,#b39ddb,#5e35b1);}
+.backspace-ship{display:inline-block;font-size:26px;transform:rotate(225deg);}
+.dot{background:radial-gradient(circle at 30% 30%,#ce93d8,#6a1b9a);}
+.equals{background:linear-gradient(135deg,#00e5ff,#00b0ff);grid-column:1/-1;}
 </style>
 </head>
 
 <body>
-
 <div class="calculator">
-
 <canvas id="particleCanvas"></canvas>
-
 <div class="display-wrapper">
 <input id="display" class="display" readonly>
 </div>
 
 <div class="buttons">
-
 <button class="clear" onclick="clearDisplay()">CLEAR</button>
 
 <button class="num-7" onclick="appendNumber('7')">7</button>
@@ -180,266 +152,158 @@ grid-column:1/-1
 <button class="num-1" onclick="appendNumber('1')">1</button>
 <button class="num-2" onclick="appendNumber('2')">2</button>
 <button class="num-3" onclick="appendNumber('3')">3</button>
-<button class="operator" onclick="appendOperator('-')">−</button>
+<button class="operator" onclick="appendOperator('−')">−</button>
 
 <button class="num-0" onclick="appendNumber('0')">0</button>
 <button class="dot" onclick="appendDot()">.</button>
 
-<button class="backspace" onclick="backspace()">
-<span class="backspace-ship">🚀</span>
-</button>
-
+<button class="backspace" onclick="backspace()"><span class="backspace-ship">🚀</span></button>
 <button class="operator" onclick="appendOperator('+')">+</button>
 
 <button class="equals" onclick="calculate()">= LAUNCH</button>
-
 </div>
 </div>
 
 <script>
+const display=document.getElementById("display");
+let expression="";
+let lastOperator=null;
+let lastOperand=null;
+let justCalculated=false;
+const operators=["+","−","×","÷"];
 
-const display=document.getElementById("display")
+/* AUDIO */
+let audioCtx=null;
+function tone(freq,d=.05,type="square",v=.15){
+  const ctx=audioCtx||(audioCtx=new(window.AudioContext||window.webkitAudioContext)());
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type=type; osc.frequency.value=freq;
+  gain.gain.setValueAtTime(v,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+d);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(); osc.stop(ctx.currentTime+d);
+}
+function playBeep(type){
+  if(type==="num")tone(420);
+  else if(type==="operator")tone(260,.06,"triangle");
+  else if(type==="equals")tone(820,.12);
+  else if(type==="backspace")tone(200,.05,"triangle");
+  else if(type==="clear"){
+    tone(90,.25,"sawtooth",.25);
+    setTimeout(()=>tone(60,.25,"sawtooth",.2),40);
+    setTimeout(()=>tone(40,.3,"sawtooth",.15),90);
+  }
+}
 
-let expression=""
-let lastOperator=null
-let lastOperand=null
-let justCalculated=false
-
-const operators=["+","-","×","÷"]
-
+/* DISPLAY */
 function formatNumber(num){
-
-if(num==="")return ""
-
-let [int,dec]=num.split(".")
-
-int=int.replace(/\B(?=(\d{3})+(?!\d))/g,",")
-
-return dec?int+"."+dec:int
-
+  if(num==="")return "";
+  let [int,dec]=num.split(".");
+  int=int.replace(/\B(?=(\d{3})+(?!\d))/g,",");
+  return dec?int+"."+dec:int;
 }
+function updateDisplay(){ display.value=expression; }
 
-function updateDisplay(){
-
-display.value=expression
-
-}
-
+/* APPEND FUNCTIONS */
 function appendNumber(n){
-
-if(justCalculated){
-expression=""
-justCalculated=false
+  playBeep("num");
+  if(justCalculated){expression="";justCalculated=false;}
+  expression+=n; updateDisplay();
 }
-
-expression+=n
-updateDisplay()
-
-}
-
 function appendDot(){
-
-if(justCalculated){
-expression=""
-justCalculated=false
+  playBeep("num");
+  if(justCalculated){expression="";justCalculated=false;}
+  const parts=expression.split(/[+\-×÷]/);
+  if(parts[parts.length-1].includes("."))return;
+  expression+="."; updateDisplay();
 }
-
-const parts=expression.split(/[+\-×÷]/)
-if(parts[parts.length-1].includes("."))return
-
-expression+="."
-updateDisplay()
-
-}
-
 function appendOperator(op){
-
-if(expression==="")return
-
-const last=expression.slice(-1)
-
-if(operators.includes(last)){
-expression=expression.slice(0,-1)+op
-}else{
-expression+=op
+  playBeep("operator");
+  if(expression==="")return;
+  const last=expression.slice(-1);
+  if(operators.includes(last)){
+    expression=expression.slice(0,-1)+op;
+  }else expression+=op;
+  justCalculated=false;
+  updateDisplay();
 }
 
-justCalculated=false
-updateDisplay()
-
-}
-
-function backspace(){
-
-expression=expression.slice(0,-1)
-updateDisplay()
-
-}
-
-function clearDisplay(){
-
-explodeDisplay(display.value)
-
-expression=""
-updateDisplay()
-
-}
+/* BACKSPACE AND CLEAR */
+function backspace(){ playBeep("backspace"); expression=expression.slice(0,-1); updateDisplay(); }
+function clearDisplay(){ playBeep("clear"); explodeDisplay(display.value); expression=""; updateDisplay(); }
 
 /* PARTICLES */
-
-const canvas=document.getElementById("particleCanvas")
-const ctx=canvas.getContext("2d")
-
-let particles=[]
-let animating=false
-
+const canvas=document.getElementById("particleCanvas");
+const ctx=canvas.getContext("2d");
+let particles=[]; let animating=false;
 function resizeCanvas(){
-const rect=document.querySelector(".calculator").getBoundingClientRect()
-canvas.width=rect.width+280
-canvas.height=rect.height+280
+  const rect=document.querySelector(".calculator").getBoundingClientRect();
+  canvas.width=rect.width+280;
+  canvas.height=rect.height+280;
 }
-
-resizeCanvas()
-window.addEventListener("resize",resizeCanvas)
+resizeCanvas();
+window.addEventListener("resize",resizeCanvas);
 
 function explodeDisplay(text){
-
-particles=[]
-
-if(!text)return
-
-const rect=display.getBoundingClientRect()
-const calc=document.querySelector(".calculator").getBoundingClientRect()
-
-const startX=rect.left-calc.left+140
-const startY=rect.top-calc.top+140
-const charWidth=rect.width/Math.max(text.length,1)
-
-for(let i=0;i<text.length;i++){
-
-const x=startX+i*charWidth+charWidth/2
-const y=startY+rect.height/2
-
-for(let j=0;j<10;j++){
-
-particles.push({
-x,
-y,
-vx:(Math.random()-0.5)*24,
-vy:(Math.random()-0.5)*24,
-life:40+Math.random()*20,
-size:2+Math.random()*3
-})
-
-}
-
-}
-
-if(!animating){
-animating=true
-requestAnimationFrame(animateParticles)
-}
-
+  particles=[];
+  if(!text)return;
+  const rect=display.getBoundingClientRect();
+  const calc=document.querySelector(".calculator").getBoundingClientRect();
+  const startX=rect.left-calc.left+140;
+  const startY=rect.top-calc.top+140;
+  const charWidth=rect.width/Math.max(text.length,1);
+  for(let i=0;i<text.length;i++){
+    const x=startX+i*charWidth+charWidth/2;
+    const y=startY+rect.height/2;
+    for(let j=0;j<10;j++){
+      particles.push({x,y,vx:(Math.random()-0.5)*24,vy:(Math.random()-0.5)*24,life:40+Math.random()*20,size:2+Math.random()*3});
+    }
+  }
+  if(!animating){animating=true; requestAnimationFrame(animateParticles);}
 }
 
 function animateParticles(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height)
-
-for(let i=particles.length-1;i>=0;i--){
-
-const p=particles[i]
-
-p.x+=p.vx
-p.y+=p.vy
-p.vy+=0.16
-p.life--
-
-ctx.fillStyle="#76ff03"
-ctx.fillRect(p.x,p.y,p.size,p.size)
-
-if(p.life<=0)particles.splice(i,1)
-
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=particles.length-1;i>=0;i--){
+    const p=particles[i];
+    p.x+=p.vx; p.y+=p.vy; p.vy+=0.16; p.life--;
+    ctx.fillStyle="#76ff03"; ctx.fillRect(p.x,p.y,p.size,p.size);
+    if(p.life<=0)particles.splice(i,1);
+  }
+  if(particles.length)requestAnimationFrame(animateParticles);
+  else{animating=false; ctx.clearRect(0,0,canvas.width,canvas.height);}
 }
 
-if(particles.length){
-requestAnimationFrame(animateParticles)
-}else{
-animating=false
-ctx.clearRect(0,0,canvas.width,canvas.height)
-}
-
-}
-
-/* CALCULATE */
-
+/* CALCULATION */
 function calculate(){
-
-let jsExp=expression
-.replace(/×/g,"*")
-.replace(/÷/g,"/")
-
-try{
-
-const result=eval(jsExp)
-
-const match=jsExp.match(/([+\-*/])([^+\-*/]+)$/)
-
-if(match){
-lastOperator=match[1]
-lastOperand=match[2]
-}
-
-expression=String(result)
-justCalculated=true
-
-display.value=formatNumber(expression)
-
-}catch{
-
-display.value="ERROR"
-
-setTimeout(()=>{
-expression=""
-updateDisplay()
-},1000)
-
-}
-
+  playBeep("equals");
+  let jsExp=expression.replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-");
+  try{
+    const result=eval(jsExp);
+    const match=jsExp.match(/([+\-*/])([^+\-*/]+)$/);
+    if(match){lastOperator=match[1]; lastOperand=match[2];}
+    expression=String(result);
+    justCalculated=true;
+    display.value=formatNumber(expression);
+  }catch{
+    display.value="ERROR";
+    setTimeout(()=>{expression=""; updateDisplay();},1000);
+  }
 }
 
 /* KEYBOARD */
-
 window.addEventListener("keydown",e=>{
-
-const k=e.key
-
-if(/\d/.test(k)){appendNumber(k);return}
-
-if(k==="."){appendDot();return}
-
-if(k==="*"){appendOperator("×");return}
-if(k==="/"){appendOperator("÷");return}
-if(k==="+"||k==="-" ){appendOperator(k);return}
-
-if(k==="Enter"||k==="="){
-e.preventDefault()
-calculate()
-return
-}
-
-if(k==="Backspace"){
-e.preventDefault()
-backspace()
-}
-
-if(k==="Escape"||k.toLowerCase()==="c"){
-clearDisplay()
-}
-
-})
-
+  const k=e.key;
+  if(/\d/.test(k)){appendNumber(k); return;}
+  if(k==="."){appendDot(); return;}
+  if(k==="*"){appendOperator("×"); return;}
+  if(k==="/"){appendOperator("÷"); return;}
+  if(k==="+"||k==="-"){appendOperator(k==="-"?"−":"+"); return;}
+  if(k==="Enter"||k==="="){e.preventDefault(); calculate(); return;}
+  if(k==="Backspace"){e.preventDefault(); backspace(); return;}
+  if(k==="Escape"||k.toLowerCase()==="c"){clearDisplay(); return;}
+});
 </script>
-
 </body>
 </html>
