@@ -456,6 +456,14 @@ function append(val) {
   }
 }
 
+function backspace() {
+  if (!display.value) return;
+
+  playBeep('backspace');
+
+  display.value = display.value.slice(0, -1);
+}
+    
 function clearDisplay() {
   playBeep('clear');
   display.value = '';
@@ -528,6 +536,7 @@ function calculate() {
   </script>
 </body>
 </html>
+
 
 
 
